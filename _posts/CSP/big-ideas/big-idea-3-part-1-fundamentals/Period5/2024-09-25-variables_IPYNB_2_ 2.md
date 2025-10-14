@@ -1,13 +1,14 @@
 ---
-layout: post
-title: 3.2 - Data Abstraction - Variables
-description: Nolan & Jacob's Data Abstraction Presentation
-author: Nolan
-toc: True
-comments: True
-menu: nav/csp_units/csp_unit3_p5_fundamentals.html
-permalink: /csp/big-idea/p5/3-2-1
+layout: "post"
+title: "3.2 - Data Abstraction - Variables"
+description: "Nolan & Jacob's Data Abstraction Presentation"
+author: "Nolan"
+toc: true
+comments: true
+menu: "nav/csp_units/csp_unit3_p5_fundamentals.html"
+permalink: "/csp/big-idea/p5/3-2-1/"
 ---
+
 
 ```python
 from IPython.core.display import HTML; set_custom_css = lambda: HTML('<style>:root {--light-pink: #ffccdd; --medium-pink: #ff66b3; --dark-pink: #ff3385; --accent-pink: #ff99cc; --background-pink: #ffe6f0;} body {background-color: var(--background-pink) !important; color: var(--dark-pink) !important;} article {background-color: var(--light-pink) !important; color: var(--dark-pink) !important; border: 2px solid var(--medium-pink) !important; padding: 20px !important; border-radius: 8px !important;} a {color: var(--accent-pink) !important;} a:hover {color: var(--dark-pink) !important;} h1, h2, h3, h4 {color: white !important;} blockquote {background-color: #272726 !important; border-left: 4px solid var(--medium-pink) !important; color: var(--dark-pink) !important; padding: 10px 20px !important; margin: 10px 0 !important; border-radius: 4px !important;} code {background-color: var(--accent-pink) !important; color: white !important; padding: 2px 4px !important; border-radius: 4px !important;} .site-nav {background-color: var(--medium-pink) !important;} table td {background-color: var(--dark-pink) !important;}</style>'); set_custom_css()
