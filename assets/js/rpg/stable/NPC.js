@@ -6,7 +6,7 @@ class NPC extends Player {
         super(data);
         this.alertTimeout = null;
     }
-
+//hi
     /**
      * Override the update method to draw the NPC.
      * This NPC is stationary, so the update method only calls the draw method.
