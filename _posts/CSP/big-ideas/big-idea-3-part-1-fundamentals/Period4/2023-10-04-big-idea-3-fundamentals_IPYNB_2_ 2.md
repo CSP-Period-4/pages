@@ -301,6 +301,52 @@ menu: /nav/csp_units/csp_unit3_p4_fundamentals.html
     cursor: not-allowed;
 }
 
+.p4-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--p4-space-sm);
+    margin-top: var(--p4-space-md);
+}
+
+.p4-action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--p4-space-xs);
+    padding: var(--p4-space-sm) var(--p4-space-lg);
+    border-radius: var(--p4-radius-full);
+    border: 1px solid var(--p4-clr-primary-dark);
+    background: var(--p4-gradient-primary);
+    color: var(--p4-clr-text-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: var(--p4-transition-normal);
+    box-shadow: var(--p4-shadow-glow);
+}
+
+.p4-action-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--p4-shadow-glow-strong);
+}
+
+.p4-action-button:active {
+    transform: translateY(-1px);
+}
+
+.p4-action-button--secondary {
+    border-color: var(--p4-clr-border);
+    background: var(--p4-clr-surface-glass);
+    color: var(--p4-clr-text-secondary);
+    box-shadow: var(--p4-shadow-md);
+}
+
+.p4-action-button--secondary:hover {
+    color: var(--p4-clr-text-primary);
+    background: var(--p4-gradient-glass);
+}
+
 .p4-hero__dashboard {
     display: grid;
     gap: var(--p4-space-lg);
@@ -745,6 +791,104 @@ menu: /nav/csp_units/csp_unit3_p4_fundamentals.html
     height: 14px;
 }
 
+.p4-submissions {
+    display: none;
+    margin-top: var(--p4-space-2xl);
+    margin-bottom: clamp(var(--p4-space-xl), 3vw, var(--p4-space-2xl));
+    padding: clamp(var(--p4-space-lg), 4vw, var(--p4-space-xl));
+    border-radius: var(--p4-radius-xl);
+    background: var(--p4-clr-surface-elevated);
+    border: 1px solid var(--p4-clr-border);
+    box-shadow: var(--p4-shadow-xl);
+    gap: var(--p4-space-lg);
+}
+
+.p4-submissions.is-visible {
+    display: grid;
+}
+
+.p4-submissions__header h2 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--p4-clr-text-primary);
+}
+
+.p4-submissions__header p {
+    margin: var(--p4-space-xs) 0 0;
+    color: var(--p4-clr-text-muted);
+    font-size: 1rem;
+}
+
+.p4-submissions__search {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: var(--p4-space-sm);
+    width: 100%;
+}
+
+.p4-submissions__input {
+    padding: var(--p4-space-sm) var(--p4-space-md);
+    border-radius: var(--p4-radius-full);
+    border: 1px solid var(--p4-clr-border);
+    background: var(--p4-clr-surface-glass);
+    color: var(--p4-clr-text-primary);
+    font-size: 1rem;
+    transition: var(--p4-transition-normal);
+}
+
+.p4-submissions__input:focus {
+    outline: none;
+    border-color: var(--p4-clr-border-focus);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+}
+
+.p4-submissions__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: var(--p4-space-sm);
+}
+
+.p4-submissions__item {
+    padding: var(--p4-space-md) var(--p4-space-lg);
+    border-radius: var(--p4-radius-lg);
+    background: var(--p4-clr-surface-glass);
+    border: 1px solid var(--p4-clr-border);
+    box-shadow: var(--p4-shadow-md);
+    display: grid;
+    gap: var(--p4-space-xs);
+}
+
+.p4-submissions__item strong {
+    font-size: 1rem;
+    color: var(--p4-clr-text-primary);
+}
+
+.p4-submissions__item span {
+    font-size: 0.9rem;
+    color: var(--p4-clr-text-muted);
+}
+
+.p4-submissions__item p {
+    margin: var(--p4-space-xs) 0 0;
+    color: var(--p4-clr-text-secondary);
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
+
+.p4-submissions__empty {
+    margin: 0;
+    padding: var(--p4-space-md);
+    border-radius: var(--p4-radius-lg);
+    background: var(--p4-clr-surface-glass);
+    border: 1px dashed var(--p4-clr-border);
+    color: var(--p4-clr-text-muted);
+    text-align: center;
+    font-size: 0.95rem;
+}
+
 .p4-roadmap {
     margin-bottom: clamp(var(--p4-space-xl), 4vw, var(--p4-space-2xl));
 }
@@ -1183,6 +1327,14 @@ menu: /nav/csp_units/csp_unit3_p4_fundamentals.html
             <div class="p4-quick-links" data-quick-links>
                 <span class="p4-quick-links__ghost">Progress a little more to unlock quick actions.</span>
             </div>
+            <div class="p4-actions">
+                <a class="p4-action-button" href="/csp/big-idea/p4/fundamentals/homework-submission">
+                    Submit Homework
+                </a>
+                <button class="p4-action-button p4-action-button--secondary" type="button" data-submissions-toggle>
+                    View Submissions
+                </button>
+            </div>
         </div>
         <aside class="p4-hero__dashboard">
             <div class="p4-orb" data-progress-ring>
@@ -1235,6 +1387,20 @@ menu: /nav/csp_units/csp_unit3_p4_fundamentals.html
         </header>
         
         <div class="p4-module-grid" data-lessons-root></div>
+    </section>
+
+    <section class="p4-submissions" data-submissions-panel>
+        <div class="p4-submissions__header">
+            <h2>Homework Submissions</h2>
+            <p>Search by student name to review saved work from the submission portal.</p>
+        </div>
+        <div class="p4-submissions__search">
+            <input class="p4-submissions__input" type="search" placeholder="Search by student name…" aria-label="Search by student name" data-submissions-search>
+            <button class="p4-action-button p4-action-button--secondary" type="button" data-submissions-clear>Clear Search</button>
+            <button class="p4-action-button" type="button" data-submissions-refresh>Refresh List</button>
+        </div>
+        <ul class="p4-submissions__list" data-submissions-list></ul>
+        <p class="p4-submissions__empty" data-submissions-empty>No homework submissions saved yet. Ask students to submit their work first.</p>
     </section>
 
 </div>
@@ -1702,5 +1868,141 @@ menu: /nav/csp_units/csp_unit3_p4_fundamentals.html
     }
 
     waitForProgress();
+})();
+</script>
+
+<script>
+(function() {
+    const STORAGE_KEY = 'p4-fundamentals-homework-submissions';
+    const toggleButton = document.querySelector('[data-submissions-toggle]');
+    const panel = document.querySelector('[data-submissions-panel]');
+
+    if (!toggleButton || !panel) {
+        return;
+    }
+
+    const searchInput = panel.querySelector('[data-submissions-search]');
+    const clearButton = panel.querySelector('[data-submissions-clear]');
+    const refreshButton = panel.querySelector('[data-submissions-refresh]');
+    const list = panel.querySelector('[data-submissions-list]');
+    const emptyState = panel.querySelector('[data-submissions-empty]');
+
+    function readSubmissions() {
+        try {
+            const raw = window.localStorage.getItem(STORAGE_KEY);
+            if (!raw) {
+                return [];
+            }
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (error) {
+            console.warn('Unable to read saved homework submissions.', error);
+            return [];
+        }
+    }
+
+    function formatDate(timestamp) {
+        if (!timestamp) {
+            return 'Unknown time';
+        }
+        try {
+            const date = new Date(timestamp);
+            return date.toLocaleString();
+        } catch (error) {
+            return 'Unknown time';
+        }
+    }
+
+    function renderList() {
+        if (!list || !emptyState) {
+            return;
+        }
+
+        const term = (searchInput && searchInput.value ? searchInput.value : '').trim().toLowerCase();
+        const submissions = readSubmissions()
+            .filter((entry) => {
+                if (!term) {
+                    return true;
+                }
+                const name = (entry.name || '').toLowerCase();
+                return name.includes(term);
+            })
+            .sort((a, b) => {
+                return (b.submittedAt || 0) - (a.submittedAt || 0);
+            });
+
+        list.innerHTML = '';
+
+        if (!submissions.length) {
+            emptyState.style.display = 'block';
+            return;
+        }
+
+        emptyState.style.display = 'none';
+
+        submissions.forEach((entry) => {
+            const item = document.createElement('li');
+            item.className = 'p4-submissions__item';
+
+            const title = document.createElement('strong');
+            const displayName = entry.name || 'Anonymous';
+            const displayLesson = entry.lessonLabel || entry.lesson || 'Lesson';
+            title.textContent = displayName + ' · ' + displayLesson;
+
+            const meta = document.createElement('span');
+            meta.textContent = 'Submitted ' + formatDate(entry.submittedAt);
+
+            const body = document.createElement('p');
+            body.textContent = entry.homework || '';
+
+            item.appendChild(title);
+            item.appendChild(meta);
+            item.appendChild(body);
+
+            list.appendChild(item);
+        });
+    }
+
+    function showPanel() {
+        if (!panel.classList.contains('is-visible')) {
+            panel.classList.add('is-visible');
+        }
+        renderList();
+        if (searchInput) {
+            searchInput.focus();
+        }
+    }
+
+    function hidePanel() {
+        panel.classList.remove('is-visible');
+    }
+
+    toggleButton.addEventListener('click', () => {
+        if (panel.classList.contains('is-visible')) {
+            hidePanel();
+        } else {
+            showPanel();
+        }
+    });
+
+    if (searchInput) {
+        searchInput.addEventListener('input', renderList);
+    }
+    if (refreshButton) {
+        refreshButton.addEventListener('click', renderList);
+    }
+    if (clearButton) {
+        clearButton.addEventListener('click', () => {
+            if (searchInput) {
+                searchInput.value = '';
+            }
+            renderList();
+            if (searchInput) {
+                searchInput.focus();
+            }
+        });
+    }
+
+    document.addEventListener('p4-homework-submitted', renderList);
 })();
 </script>
