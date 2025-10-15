@@ -1,0 +1,653 @@
+<!-- P4 Lesson Quiz Widget - See /docs/add-quiz for usage instructions -->
+
+<div class="p4-quiz" data-quiz>
+    <div class="p4-quiz__header">
+        <div class="p4-quiz__icon">📝</div>
+        <h3 class="p4-quiz__title">{{ include.quiz_title | default: "Quick Knowledge Check" }}</h3>
+        <div class="p4-quiz__score" data-quiz-score>
+            <span class="p4-quiz__score-current" data-score-current>0</span>
+            <span class="p4-quiz__score-divider">/</span>
+            <span class="p4-quiz__score-total" data-score-total>0</span>
+        </div>
+    </div>
+
+    <div class="p4-quiz__progress" data-quiz-progress>
+        <div class="p4-quiz__progress-bar" data-progress-bar></div>
+    </div>
+
+    <div class="p4-quiz__content" data-quiz-content>
+        <!-- Questions will be inserted here by JavaScript -->
+    </div>
+
+    <div class="p4-quiz__actions" data-quiz-actions>
+        <button class="p4-quiz__btn p4-quiz__btn--primary" data-quiz-check disabled>
+            Check Answer
+        </button>
+        <button class="p4-quiz__btn p4-quiz__btn--secondary" data-quiz-next style="display: none;">
+            Next Question &rarr;
+        </button>
+        <button class="p4-quiz__btn p4-quiz__btn--restart" data-quiz-restart style="display: none;">
+            🔄 Restart Quiz
+        </button>
+    </div>
+
+    <div class="p4-quiz__results" data-quiz-results style="display: none;">
+        <div class="p4-quiz__results-icon" data-results-icon>🎉</div>
+        <h4 class="p4-quiz__results-title" data-results-title>Great job!</h4>
+        <p class="p4-quiz__results-message" data-results-message></p>
+        <div class="p4-quiz__results-stats">
+            <div class="p4-quiz__stat">
+                <span class="p4-quiz__stat-value" data-stat-score>0</span>
+                <span class="p4-quiz__stat-label">Score</span>
+            </div>
+            <div class="p4-quiz__stat">
+                <span class="p4-quiz__stat-value" data-stat-percent>0%</span>
+                <span class="p4-quiz__stat-label">Accuracy</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden data element to store quiz questions -->
+    <script type="application/json" data-quiz-data>
+        {{ include.quiz_data }}
+    </script>
+</div>
+
+<style>
+.p4-quiz {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.98));
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 16px;
+    padding: 32px;
+    margin: 32px 0;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 20px rgba(99, 102, 241, 0.3);
+    position: relative;
+    overflow: hidden;
+    color: #f8fafc;
+}
+
+.p4-quiz::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #6366f1, #818cf8, #06b6d4);
+    opacity: 0.8;
+}
+
+.p4-quiz__header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.p4-quiz__icon {
+    font-size: 2rem;
+    filter: drop-shadow(0 4px 8px rgba(99, 102, 241, 0.3));
+}
+
+.p4-quiz__title {
+    flex: 1;
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #6366f1, #818cf8);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.p4-quiz__score {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    font-weight: 600;
+}
+
+.p4-quiz__score-current {
+    font-size: 1.5rem;
+    color: #10b981;
+}
+
+.p4-quiz__score-divider {
+    color: #94a3b8;
+}
+
+.p4-quiz__score-total {
+    color: #cbd5e1;
+}
+
+.p4-quiz__progress {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.p4-quiz__progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #818cf8);
+    border-radius: 999px;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0;
+}
+
+.p4-quiz__content {
+    min-height: 300px;
+    margin-bottom: 24px;
+}
+
+.p4-quiz__question {
+    margin-bottom: 24px;
+}
+
+.p4-quiz__question-text {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #f8fafc;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.p4-quiz__question-number {
+    display: inline-block;
+    padding: 4px 12px;
+    background: linear-gradient(135deg, #6366f1, #818cf8);
+    border-radius: 999px;
+    font-size: 0.875rem;
+    margin-right: 8px;
+    font-weight: 700;
+}
+
+.p4-quiz__options {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.p4-quiz__option {
+    position: relative;
+}
+
+.p4-quiz__option-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.p4-quiz__option-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(148, 163, 184, 0.2);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+}
+
+.p4-quiz__option-label:hover {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: rgba(99, 102, 241, 0.4);
+    transform: translateX(4px);
+}
+
+.p4-quiz__option-input:checked + .p4-quiz__option-label {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: #6366f1;
+}
+
+.p4-quiz__option-letter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: #cbd5e1;
+    flex-shrink: 0;
+}
+
+.p4-quiz__option-input:checked + .p4-quiz__option-label .p4-quiz__option-letter {
+    background: linear-gradient(135deg, #6366f1, #818cf8);
+    color: #ffffff;
+}
+
+.p4-quiz__option-text {
+    flex: 1;
+    color: #f8fafc;
+    font-weight: 500;
+}
+
+/* Correct/Incorrect states */
+.p4-quiz__option--correct .p4-quiz__option-label {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: #10b981;
+}
+
+.p4-quiz__option--correct .p4-quiz__option-letter {
+    background: linear-gradient(135deg, #10b981, #34d399);
+}
+
+.p4-quiz__option--incorrect .p4-quiz__option-label {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: #ef4444;
+}
+
+.p4-quiz__option--incorrect .p4-quiz__option-letter {
+    background: linear-gradient(135deg, #ef4444, #f87171);
+}
+
+.p4-quiz__option--disabled .p4-quiz__option-label {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.p4-quiz__explanation {
+    margin-top: 20px;
+    padding: 16px 20px;
+    background: rgba(99, 102, 241, 0.1);
+    border-left: 4px solid #6366f1;
+    border-radius: 8px;
+    display: none;
+}
+
+.p4-quiz__explanation.is-visible {
+    display: block;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.p4-quiz__explanation-icon {
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.p4-quiz__explanation-text {
+    color: #cbd5e1;
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+.p4-quiz__actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.p4-quiz__btn {
+    padding: 12px 32px;
+    border-radius: 999px;
+    border: 2px solid;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.p4-quiz__btn--primary {
+    background: linear-gradient(135deg, #6366f1, #818cf8);
+    border-color: #6366f1;
+    color: #ffffff;
+}
+
+.p4-quiz__btn--primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+}
+
+.p4-quiz__btn--primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.p4-quiz__btn--secondary {
+    background: linear-gradient(135deg, #10b981, #34d399);
+    border-color: #10b981;
+    color: #ffffff;
+}
+
+.p4-quiz__btn--secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+}
+
+.p4-quiz__btn--restart {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(148, 163, 184, 0.4);
+    color: #cbd5e1;
+}
+
+.p4-quiz__btn--restart:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #6366f1;
+    color: #f8fafc;
+}
+
+.p4-quiz__results {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.p4-quiz__results-icon {
+    font-size: 4rem;
+    margin-bottom: 16px;
+    animation: bounce 0.5s ease-out;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.p4-quiz__results-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0 0 12px 0;
+    background: linear-gradient(135deg, #6366f1, #818cf8);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.p4-quiz__results-message {
+    font-size: 1.125rem;
+    color: #cbd5e1;
+    margin-bottom: 32px;
+}
+
+.p4-quiz__results-stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 24px;
+}
+
+.p4-quiz__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.p4-quiz__stat-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #10b981, #34d399);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.p4-quiz__stat-label {
+    font-size: 0.875rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .p4-quiz {
+        padding: 24px 16px;
+    }
+
+    .p4-quiz__header {
+        flex-wrap: wrap;
+    }
+
+    .p4-quiz__title {
+        font-size: 1.25rem;
+    }
+
+    .p4-quiz__actions {
+        flex-direction: column;
+    }
+
+    .p4-quiz__btn {
+        width: 100%;
+    }
+}
+</style>
+
+<script>
+(function() {
+    const quizEl = document.querySelector('[data-quiz]');
+    if (!quizEl) return;
+
+    const dataEl = quizEl.querySelector('[data-quiz-data]');
+    if (!dataEl) {
+        console.warn('P4 Quiz: No quiz data found');
+        return;
+    }
+
+    let questions = [];
+    try {
+        questions = JSON.parse(dataEl.textContent.trim());
+    } catch (err) {
+        console.error('P4 Quiz: Failed to parse quiz data', err);
+        return;
+    }
+
+    if (!questions || questions.length === 0) {
+        console.warn('P4 Quiz: No questions provided');
+        return;
+    }
+
+    // Elements
+    const contentEl = quizEl.querySelector('[data-quiz-content]');
+    const checkBtn = quizEl.querySelector('[data-quiz-check]');
+    const nextBtn = quizEl.querySelector('[data-quiz-next]');
+    const restartBtn = quizEl.querySelector('[data-quiz-restart]');
+    const resultsEl = quizEl.querySelector('[data-quiz-results]');
+    const progressBar = quizEl.querySelector('[data-progress-bar]');
+    const scoreCurrent = quizEl.querySelector('[data-score-current]');
+    const scoreTotal = quizEl.querySelector('[data-score-total]');
+
+    // State
+    let currentQuestion = 0;
+    let score = 0;
+    let answered = false;
+
+    // Initialize
+    scoreTotal.textContent = questions.length;
+
+    function renderQuestion() {
+        const q = questions[currentQuestion];
+        const questionNum = currentQuestion + 1;
+
+        const html = `
+            <div class="p4-quiz__question">
+                <div class="p4-quiz__question-text">
+                    <span class="p4-quiz__question-number">Question ${questionNum}</span>
+                    ${q.question}
+                </div>
+                <ul class="p4-quiz__options">
+                    ${q.options.map((opt, idx) => `
+                        <li class="p4-quiz__option" data-option="${idx}">
+                            <input
+                                type="radio"
+                                name="quiz-answer"
+                                value="${idx}"
+                                id="quiz-opt-${idx}"
+                                class="p4-quiz__option-input"
+                            >
+                            <label for="quiz-opt-${idx}" class="p4-quiz__option-label">
+                                <span class="p4-quiz__option-letter">${String.fromCharCode(65 + idx)}</span>
+                                <span class="p4-quiz__option-text">${opt}</span>
+                            </label>
+                        </li>
+                    `).join('')}
+                </ul>
+                <div class="p4-quiz__explanation" data-explanation>
+                    <span class="p4-quiz__explanation-icon">💡</span>
+                    <span class="p4-quiz__explanation-text">${q.explanation || ''}</span>
+                </div>
+            </div>
+        `;
+
+        contentEl.innerHTML = html;
+        answered = false;
+        checkBtn.disabled = true;
+        checkBtn.style.display = 'inline-block';
+        nextBtn.style.display = 'none';
+
+        // Add event listeners
+        contentEl.querySelectorAll('[name="quiz-answer"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                checkBtn.disabled = false;
+            });
+        });
+
+        // Update progress
+        const progress = ((currentQuestion) / questions.length) * 100;
+        progressBar.style.width = progress + '%';
+    }
+
+    function checkAnswer() {
+        if (answered) return;
+
+        const selected = contentEl.querySelector('[name="quiz-answer"]:checked');
+        if (!selected) return;
+
+        answered = true;
+        const userAnswer = parseInt(selected.value);
+        const correctAnswer = questions[currentQuestion].correct;
+        const isCorrect = userAnswer === correctAnswer;
+
+        if (isCorrect) {
+            score++;
+            scoreCurrent.textContent = score;
+        }
+
+        // Show feedback
+        const options = contentEl.querySelectorAll('[data-option]');
+        options.forEach((opt, idx) => {
+            const optEl = opt;
+            const input = optEl.querySelector('input');
+            input.disabled = true;
+
+            if (idx === correctAnswer) {
+                optEl.classList.add('p4-quiz__option--correct');
+            } else if (idx === userAnswer && !isCorrect) {
+                optEl.classList.add('p4-quiz__option--incorrect');
+            }
+
+            optEl.classList.add('p4-quiz__option--disabled');
+        });
+
+        // Show explanation
+        const explanationEl = contentEl.querySelector('[data-explanation]');
+        if (explanationEl && questions[currentQuestion].explanation) {
+            explanationEl.classList.add('is-visible');
+        }
+
+        // Update buttons
+        checkBtn.style.display = 'none';
+        if (currentQuestion < questions.length - 1) {
+            nextBtn.style.display = 'inline-block';
+        } else {
+            showResults();
+        }
+    }
+
+    function nextQuestion() {
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            renderQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function showResults() {
+        contentEl.style.display = 'none';
+        nextBtn.style.display = 'none';
+        checkBtn.style.display = 'none';
+        resultsEl.style.display = 'block';
+        restartBtn.style.display = 'inline-block';
+        progressBar.style.width = '100%';
+
+        const percent = Math.round((score / questions.length) * 100);
+
+        let icon = '🎉';
+        let title = 'Excellent work!';
+        let message = 'You really know your stuff!';
+
+        if (percent === 100) {
+            icon = '🏆';
+            title = 'Perfect Score!';
+            message = 'You got every question right! Outstanding!';
+        } else if (percent >= 80) {
+            icon = '🎉';
+            title = 'Great job!';
+            message = 'You have a strong understanding of this topic!';
+        } else if (percent >= 60) {
+            icon = '👍';
+            title = 'Good effort!';
+            message = 'You\'re on the right track. Review the material and try again!';
+        } else {
+            icon = '📚';
+            title = 'Keep learning!';
+            message = 'Take another look at the lesson and give it another try!';
+        }
+
+        resultsEl.querySelector('[data-results-icon]').textContent = icon;
+        resultsEl.querySelector('[data-results-title]').textContent = title;
+        resultsEl.querySelector('[data-results-message]').textContent = message;
+        resultsEl.querySelector('[data-stat-score]').textContent = `${score}/${questions.length}`;
+        resultsEl.querySelector('[data-stat-percent]').textContent = percent + '%';
+    }
+
+    function restart() {
+        currentQuestion = 0;
+        score = 0;
+        answered = false;
+        scoreCurrent.textContent = '0';
+        contentEl.style.display = 'block';
+        resultsEl.style.display = 'none';
+        restartBtn.style.display = 'none';
+        renderQuestion();
+    }
+
+    // Event listeners
+    checkBtn.addEventListener('click', checkAnswer);
+    nextBtn.addEventListener('click', nextQuestion);
+    restartBtn.addEventListener('click', restart);
+
+    // Start quiz
+    renderQuestion();
+})();
+</script>
