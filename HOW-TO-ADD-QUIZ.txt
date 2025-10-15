@@ -1,0 +1,192 @@
+========================================
+ HOW TO ADD QUIZZES TO LESSONS
+========================================
+
+SUPER EASY! Just 2 steps:
+
+STEP 1: Add quiz data to your lesson file
+------------------------------------------
+At the END of any lesson markdown file, add:
+
+{% capture quiz_data %}
+[
+  {
+    "question": "Your question here?",
+    "options": [
+      "Option A",
+      "Option B",
+      "Option C",
+      "Option D"
+    ],
+    "correct": 0,
+    "explanation": "Why this answer is correct"
+  },
+  {
+    "question": "Another question?",
+    "options": ["A", "B", "C", "D"],
+    "correct": 2,
+    "explanation": "Explain why option C is right"
+  }
+]
+{% endcapture %}
+{% include csp/p4-lesson-quiz.html quiz_data=quiz_data quiz_title="My Quiz Title" %}
+
+
+STEP 2: That's it!
+------------------------------------------
+Your quiz will automatically appear with:
+- Interactive multiple choice
+- Instant feedback (green=correct, red=wrong)
+- Explanations after each answer
+- Progress tracking
+- Final score screen
+- Beautiful modern design
+
+
+QUIZ DATA FORMAT
+================
+
+Each question needs 4 things:
+1. "question" - The question text
+2. "options" - Array of 4 answer choices
+3. "correct" - Index of correct answer (0=A, 1=B, 2=C, 3=D)
+4. "explanation" - Why the answer is correct
+
+
+EXAMPLES
+========
+
+Example 1: Variables Quiz
+-------------------------
+{% capture quiz_data %}
+[
+  {
+    "question": "What is a variable?",
+    "options": [
+      "A storage container for data",
+      "A type of loop",
+      "A function",
+      "A class"
+    ],
+    "correct": 0,
+    "explanation": "Variables store data that can change during program execution."
+  }
+]
+{% endcapture %}
+{% include csp/p4-lesson-quiz.html quiz_data=quiz_data quiz_title="Variables Quiz" %}
+
+
+Example 2: Strings Quiz
+-----------------------
+{% capture quiz_data %}
+[
+  {
+    "question": "How do you create a string in Python?",
+    "options": [
+      "Using brackets []",
+      "Using quotes '' or \"\"",
+      "Using braces {}",
+      "Using parens ()"
+    ],
+    "correct": 1,
+    "explanation": "Strings use single or double quotes: 'hello' or \"world\""
+  },
+  {
+    "question": "What does len('hello') return?",
+    "options": ["4", "5", "6", "Error"],
+    "correct": 1,
+    "explanation": "len() counts characters. 'hello' has 5 letters."
+  }
+]
+{% endcapture %}
+{% include csp/p4-lesson-quiz.html quiz_data=quiz_data quiz_title="Strings Quiz" %}
+
+
+TIPS
+====
+
+✓ Use 4 options for each question (A, B, C, D)
+✓ Make explanations helpful and educational
+✓ Test actual understanding, not memorization
+✓ Keep questions clear and concise
+✓ Use real-world examples when possible
+
+✗ Don't make questions too easy or too hard
+✗ Don't use trick questions
+✗ Don't have multiple correct answers
+✗ Don't skip explanations
+
+
+CUSTOMIZATION
+=============
+
+Change the title:
+{% include csp/p4-lesson-quiz.html quiz_data=quiz_data quiz_title="Custom Title Here" %}
+
+Default title (if not specified):
+"Quick Knowledge Check"
+
+
+WHERE TO PUT IT
+===============
+
+Add the quiz at the END of your lesson file, after all your content.
+
+Example lesson structure:
+---
+layout: post
+title: My Lesson
+---
+
+## Lesson Content
+
+Your lesson goes here...
+
+---
+
+## Quiz: Test Your Knowledge!
+
+{% capture quiz_data %}
+[your quiz questions here]
+{% endcapture %}
+{% include csp/p4-lesson-quiz.html quiz_data=quiz_data quiz_title="Lesson Quiz" %}
+
+
+LIVE EXAMPLE
+============
+
+See it in action:
+http://127.0.0.1:4500/csp/big-idea/p4/3-1-1
+
+(Scroll to the bottom to see the "Variables Quiz")
+
+
+TROUBLESHOOTING
+===============
+
+Quiz doesn't appear?
+- Check JSON syntax (commas, quotes, brackets)
+- Validate correct indices are 0, 1, 2, or 3
+- Ensure quiz_data variable name matches
+
+Quiz shows but buttons don't work?
+- Check browser console for errors
+- Make sure all questions have exactly 4 options
+- Verify JSON is valid
+
+Need help?
+- Look at the example on lesson 3-1-1
+- Ask in team chat
+- Check browser console for errors
+
+
+THAT'S IT!
+==========
+
+Adding quizzes is super simple:
+1. Copy the template above
+2. Replace questions/answers
+3. Paste at end of lesson
+4. Done!
+
+Happy quiz creating! 🎉
