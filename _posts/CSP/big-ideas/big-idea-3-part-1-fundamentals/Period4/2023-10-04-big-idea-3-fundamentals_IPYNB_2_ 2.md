@@ -1730,4 +1730,8 @@ menu: /nav/csp_units/csp_unit3_p4_fundamentals.html
 })();
 </script>
 
+<!-- P4 Progress System -->
+{% include csp/p4-progress-data.html %}
+{% include csp/p4-progress-controller.html %}
+
 <script src="{{ '/assets/js/p4-fundamentals-homework.js' | relative_url }}"></script>
